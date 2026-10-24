@@ -14,11 +14,6 @@ You:    Intro Bio is full. Tell me if anything opens.
 Cubbie: Watching BIO 101 sec 02 (T Th 1:30-2:45 PM). It's full right now, and the waitlist has room.
         I'll only text you when something changes.
 
-        ...meanwhile you use Cubbie for everything else...
-
-You:    Can you move my study group to Thursday?
-Cubbie: Done. Moved to Thursday 6 PM.
-
         ...two days later...
 
 Cubbie: Seat opened: BIO 101 sec 02, class 30002, T Th 1:30-2:45 PM. 1 seat left.
@@ -31,8 +26,7 @@ Cubbie: Class numbers:
         Registration page is below. Sign in and finish the swap yourself.
 ```
 
-Cubbie keeps watching in the background while you talk to it about anything else. When nothing has changed, it doesn't
-text you about it.
+Cubbie keeps watching in the background.
 
 ## How it works
 
@@ -43,24 +37,25 @@ text you about it.
 
 ## Why this belongs in Cubbie
 
-A seat-tracker website can tell you a seat opened. It can't tell you the seat clashes with your job, that the lecture
-is open but every lab is full, or which of your classes to swap out. Seat Sniper uses what Cubbie already has: your
-calendar, your memory of which classes could move, texting, a schedule it runs on its own, and a browser to hand you
-the registration page.
+Seat alerts already exist as websites and apps. They only know the class, so the most they can say is "a seat opened."
+
+Cubbie knows you too, so it can finish the thought:
+
+- It knows your schedule, so it tells you whether the seat clashes with your job or another class.
+- It remembers which of your classes you could give up, so it can suggest the swap.
+- It lives in your texts, so the alert reaches you where you'll actually see it. There's no new app or account.
+- It can take you straight to the registration page, so the seat is a tap away.
 
 ## What it handles
 
 - Lecture plus lab: a lecture only counts as open if a linked lab or recitation can also be taken.
-- Waitlists: it tells you when a waitlist spot opens or the line moves, and says clearly it is not a seat.
 - Clashes: it checks the opening against your schedule and names what overlaps.
 - Swaps, not drops: it never suggests dropping a class first, so you can't end up with neither.
 - Reserved seats and instructor consent: it warns you the seat may not be open to you.
-- Silence: no message when nothing changed.
 
 ## What it never does
 
-It never enrolls, drops, pays or signs in for you. You finish in your school's own system. The only thing it sends
-anywhere is a request to the school's public class search.
+It never enrolls, drops, pays or signs in for you. You finish in your school's own system.
 
 ## Install
 
