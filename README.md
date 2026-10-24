@@ -1,22 +1,23 @@
 # seat-sniper
 
-A Cubbie Skill by **State Property** for the Cubbie Hackathon (Track 1).
+A Cubbie Skill that watches full class sections and texts you the moment a seat or waitlist spot opens.
 
-Your class is full. Tell Cubbie once. When a seat opens, it checks your schedule, tells you what to swap, and sends the class numbers so you can finish it in MyASU yourself.
+Your class is full. Tell Cubbie once. When something opens, it checks your schedule, tells you what clashes and what to
+swap, and sends the class numbers so you can finish it in your school's registration system yourself.
 
 Install: text Cubbie this link, then reply "yes".
 
 ```
-https://github.com/HimJar911/seat-sniper/tree/main/seat-watch
+https://github.com/HimJar911/seat-sniper
 ```
-
-(The repository link itself also works; Cubbie finds the Skill folder inside.)
 
 ## What it does
 
-- Watches full sections (ASU built in; other schools best effort).
-- Alerts only when a seat is actually enrollable: a lecture counts only if a linked lab or recitation also has a seat.
-- Checks the open seat against your calendar and says what it overlaps.
+- Works across schools: Ellucian Banner 9 public class search and ASU are built in; any other school is read from its
+  class search page by Cubbie.
+- Alerts when a real seat is enrollable: a lecture counts only if a linked lab or recitation can also be taken.
+- Tells you about waitlist spots and waitlist movement, and labels them as not a seat.
+- Checks the opening against your calendar and says what it overlaps.
 - Offers a **swap**, never a drop, so you cannot end up with neither class.
 - Notes reserved seats and instructor-consent sections.
 - Sends nothing when nothing changed.
@@ -24,11 +25,10 @@ https://github.com/HimJar911/seat-sniper/tree/main/seat-watch
 
 ## Files
 
-- `seat-watch/SKILL.md` : the Skill Cubbie reads
-- `seat-watch/scripts/seat_watch.py` : standard-library Python, no packages
-- `seat-watch/assets/` : real ASU records used for a clearly labeled simulated replay
-- `seat-watch/tests/` : `python -m unittest discover -s seat-watch/tests`
+- `SKILL.md`: the Skill Cubbie reads
+- `scripts/seat_sniper.py`: standard-library Python, no packages
+- `references/adapters.md`: data sources and how to add a school
+- `assets/`: real-shape class records used for a clearly labeled simulated replay (`check --sample`)
+- `tests/`: `python -m unittest discover -s tests`
 
-The replay (`check --sample`) is simulated and is always labeled so.
-
-Seat counts come from ASU's public class search data. This project is not affiliated with Arizona State University.
+Seat counts come from each school's public class search. This project is not affiliated with any school or with Ellucian.
