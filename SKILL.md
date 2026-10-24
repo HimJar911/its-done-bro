@@ -27,19 +27,44 @@ None. The script uses only the Python standard library. Run it from this Skill's
 ## Which school and which data source
 
 Seat counts come from the school's own public class search, which needs no sign-in. Work out the student's school
-first (remembered, or ask once), then pick the source. Details and how to add a school are in `references/adapters.md`.
+first (remembered, or ask once), then pick the source.
 
 | The school's class search is... | Use |
 | --- | --- |
 | Ellucian Banner 9 ("Browse Classes" / "Class Search", address contains `StudentRegistrationSsb`) | `--source banner --host <registration host>` |
 | Arizona State University | `--source asu` |
-| Anything else | `--source rows`: read the page yourself and pass a small JSON file (`references/adapters.md`) |
+| Anything else | `--source rows`: read the page yourself and pass a small JSON file (see "Other schools" below) |
 
 To find a Banner host, search the web for the school's class search page and take the host from its address. Check it
 with `terms`; if it lists terms, it works. If a school asks for a sign-in just to search classes, use `rows`, and if
 that is also blocked, say so and stop.
 
-Term codes differ by school. For Banner, run `terms` and pick the one matching the term the student means.
+Term codes differ by school. For Banner, run `terms` and pick the one matching the term the student means. ASU term
+codes are `2<yy><d>`, where d is 1 spring, 4 summer, 7 fall (Spring 2027 is `2271`).
+
+### Other schools (rows)
+
+Find the school's public class search page with the web or browser ability. For the watched sections and any lab or
+recitation linked to them, write a JSON list using only numbers read from the page (never estimate):
+
+```json
+[
+  {"class_nbr": "77", "subject": "BIO", "number": "101", "section": "A", "comp": "LEC",
+   "enrl": 49, "cap": 50, "wait_cap": 10, "wait_count": 4,
+   "days": "T Th", "start": "10:00 AM", "end": "11:15 AM", "link": "A",
+   "reserved": false, "consent": false}
+]
+```
+
+- `class_nbr` is the school's unique id for the section; `enrl` and `cap` are seats taken and total. Leave out the
+  wait fields if there is no waitlist.
+- Several meetings: use `"meetings": [{"days": "M W", "start": "9:00 AM", "end": "9:50 AM"}, ...]` instead of
+  `days`/`start`/`end`.
+- Give a lecture and its lab or recitation the same `link`; leave it empty if nothing is linked.
+- Add the watch with `watch add --source rows --school <name> --class <id> --subject BIO --number 101 --term <term>`.
+  Every check, rebuild the file from the page and pass `--rows <file>`. The first check only records the baseline.
+
+Tell the student this school is read by hand, so a wrong alert is possible.
 
 ## Steps: start a watch
 
@@ -71,8 +96,14 @@ Term codes differ by school. For Banner, run `terms` and pick the one matching t
 
 ## Steps: every check
 
-Read the student's calendar and remembered classes first, and write their weekly commitments to a small JSON file
-(`references/busy-format.md`). Then run:
+Read the student's calendar and remembered classes first, and write their weekly commitments to `busy.json`. Only
+recurring weekly blocks; days are `M T W Th F Sa Su`, times like `8:00 AM`:
+
+```json
+[{"title": "Chem lecture", "days": "M W F", "start": "8:00 AM", "end": "8:50 AM"}]
+```
+
+Then run:
 
 ```bash
 python3 scripts/seat_sniper.py check --busy busy.json
@@ -146,4 +177,3 @@ Clash: your Chem lecture (T Th 2:00). Swap it for this?
 - Data goes only to the school's public class search. Nothing about the student is sent anywhere.
 - Poll gently: do not run checks more often than the student agreed to.
 - Never promise they will get the seat. Seats go fast and some are reserved.
-- A simulated replay (`check --sample`) is for demos and must be labeled simulated everywhere it is shown.

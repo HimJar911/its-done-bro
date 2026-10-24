@@ -32,8 +32,6 @@ ASU_HEADERS = {"Authorization": "Bearer null",  # what ASU's public class-search
                "User-Agent": UA}
 DAYS = {"M": 0, "T": 1, "W": 2, "Th": 3, "F": 4, "Sa": 5, "Su": 6}
 BANNER_DAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
-HERE = os.path.dirname(os.path.abspath(__file__))
-ASSETS = os.path.join(HERE, "..", "assets")
 MAX_WATCHES = 5
 RANK = {None: 0, "wait": 1, "seat": 2}
 
@@ -176,7 +174,7 @@ def normalize_banner(r, host):
 
 
 def normalize_row(r):
-    """Rows Cubbie read from any other school's class search page (see references/other-schools.md)."""
+    """Rows Cubbie read from any other school's class search page (format in SKILL.md)."""
     if "meetings" in r:
         meetings = [m for m in (meeting(parse_days(x.get("days")), x.get("start"), x.get("end")) for x in r["meetings"]) if m]
     else:
@@ -278,11 +276,6 @@ def fetch_course(source, term, subject, number, rows_file=None):
         raise Fail(2, "Cannot read the rows file (%s)" % e)
 
 
-def load_snapshot(name):
-    with open(os.path.join(ASSETS, name), encoding="utf-8") as f:
-        return [normalize_asu(c) for c in json.load(f)["classes"]]
-
-
 # ---------- availability, linked sections, conflicts ----------
 
 def evaluate(sec, all_secs):
@@ -373,21 +366,20 @@ def describe(sec):
                                          fmt_meetings(sec["meetings"]), status_line(sec))
 
 
-def build_event(etype, sec, kind, partners, busy, sample, extra=None):
+def build_event(etype, sec, kind, partners, busy, extra=None):
     ev = {"type": etype, "class_nbr": sec["class_nbr"], "course": course_name(sec), "section": sec["section"],
-          "when": fmt_meetings(sec["meetings"]), "simulated": sample}
-    tag = "[SIMULATED] " if sample else ""
+          "when": fmt_meetings(sec["meetings"])}
     if etype == "SEAT_OPENED":
-        parts = ["%sSeat opened: %s sec %s (class %s) %s, %d seat%s left." % (
-            tag, course_name(sec), sec["section"], sec["class_nbr"], fmt_meetings(sec["meetings"]), seats(sec),
+        parts = ["Seat opened: %s sec %s (class %s) %s, %d seat%s left." % (
+            course_name(sec), sec["section"], sec["class_nbr"], fmt_meetings(sec["meetings"]), seats(sec),
             "" if seats(sec) == 1 else "s")]
     elif etype == "WAITLIST_OPENED":
-        parts = ["%sWaitlist spot opened (not a seat yet): %s sec %s (class %s) %s. Waitlist: %d of %d taken." % (
-            tag, course_name(sec), sec["section"], sec["class_nbr"], fmt_meetings(sec["meetings"]),
+        parts = ["Waitlist spot opened (not a seat yet): %s sec %s (class %s) %s. Waitlist: %d of %d taken." % (
+            course_name(sec), sec["section"], sec["class_nbr"], fmt_meetings(sec["meetings"]),
             sec["wait_count"], sec["wait_cap"])]
     else:  # WAITLIST_MOVED
-        parts = ["%sWaitlist moved: %s sec %s (class %s) waitlist went from %d to %d people. Still no seat." % (
-            tag, course_name(sec), sec["section"], sec["class_nbr"], extra["was"], sec["wait_count"])]
+        parts = ["Waitlist moved: %s sec %s (class %s) waitlist went from %d to %d people. Still no seat." % (
+            course_name(sec), sec["section"], sec["class_nbr"], extra["was"], sec["wait_count"])]
         ev.update(waitlist_was=extra["was"], waitlist_now=sec["wait_count"])
         return ev, " ".join(parts)
     ev["seats_left"] = seats(sec)
@@ -423,21 +415,21 @@ def build_event(etype, sec, kind, partners, busy, sample, extra=None):
     return ev, " ".join(parts)
 
 
-def decide(w, sec, all_secs, busy, sample=False):
+def decide(w, sec, all_secs, busy):
     """Compare one watch with fresh data. Updates w. Returns (events, summary lines)."""
     kind, partners = evaluate(sec, all_secs)
     events, lines = [], []
     last, last_wait = w.get("last_kind", "unset"), w.get("last_wait")
     if last != "unset":
         if kind == "seat" and last != "seat":
-            ev, line = build_event("SEAT_OPENED", sec, kind, partners, busy, sample)
+            ev, line = build_event("SEAT_OPENED", sec, kind, partners, busy)
             events.append(ev), lines.append(line)
         elif kind == "wait" and last is None:
-            ev, line = build_event("WAITLIST_OPENED", sec, kind, partners, busy, sample)
+            ev, line = build_event("WAITLIST_OPENED", sec, kind, partners, busy)
             events.append(ev), lines.append(line)
         elif (not is_open(sec) and sec["wait_cap"] > 0 and last_wait is not None
               and sec["wait_count"] < last_wait):
-            ev, line = build_event("WAITLIST_MOVED", sec, kind, partners, busy, sample, {"was": last_wait})
+            ev, line = build_event("WAITLIST_MOVED", sec, kind, partners, busy, {"was": last_wait})
             events.append(ev), lines.append(line)
     w["last_kind"], w["last_wait"] = kind, sec["wait_count"]
     return events, lines
@@ -482,8 +474,8 @@ def cmd_lookup(a):
         rows = [s for s in rows if not is_open(s)]
     for s in rows[:a.limit]:
         flags = [f for f, on in (("reserved seats", s["reserved"]), ("instructor consent", s["consent"])) if on]
-        print("%s | %s %s sec %s %s | %s | %s%s" % (
-            s["class_nbr"], course_name(s), s["comp"], s["section"], "", fmt_meetings(s["meetings"]), status_line(s),
+        print("%s | %s %s sec %s | %s | %s%s" % (
+            s["class_nbr"], course_name(s), s["comp"], s["section"], fmt_meetings(s["meetings"]), status_line(s),
             " | " + ", ".join(flags) if flags else ""))
     if len(rows) > a.limit:
         print("... %d more not shown; narrow with --number, --comp or --status open|closed" % (len(rows) - a.limit))
@@ -588,14 +580,6 @@ def check_once(a, st, busy):
 
 def cmd_check(a):
     busy = load_busy(a.busy)
-    if a.sample:  # replay two real-shape snapshots; touches no saved state
-        before, after = load_snapshot("snapshot_before.json"), load_snapshot("snapshot_after.json")
-        target = next(s for s in before if s["link"] and own_kind(s) is None and s["comp"] == "LEC")
-        sec_after = next(s for s in after if s["class_nbr"] == target["class_nbr"])
-        w = {"last_kind": evaluate(target, before)[0], "last_wait": target["wait_count"]}
-        print("[SIMULATED replay] baseline: " + describe(target))
-        ev, ln = decide(w, sec_after, after, busy, sample=True)
-        return emit(ev, ln)
     st = load_state()
     if not st["watches"]:
         raise Fail(5, "Nothing is being watched")
@@ -603,24 +587,6 @@ def cmd_check(a):
     if changed:
         save_state(st)
     return emit(events, lines)
-
-
-def cmd_loop(a):
-    """Poll inside one process; exit 10 on the first change. For testing a background watcher."""
-    busy = load_busy(a.busy)
-    end = time.time() + a.max_minutes * 60
-    while time.time() < end:
-        st = load_state()
-        if not st["watches"]:
-            raise Fail(5, "Nothing is being watched")
-        events, lines, changed = check_once(a, st, busy)
-        if changed:
-            save_state(st)
-        if events:
-            return emit(events, lines)
-        time.sleep(a.interval)
-    print("NO CHANGE (loop ended after %d minutes)" % a.max_minutes)
-    return 0
 
 
 def add_source_args(s, required):
@@ -656,17 +622,10 @@ def build_parser():
     s.add_argument("--label")
     s.add_argument("--role", choices=["must", "backup"], default="must")
     s.set_defaults(fn=cmd_watch)
-    for name, fn in (("check", cmd_check), ("loop", cmd_loop)):
-        s = sub.add_parser(name, help="compare current seats with the last check" if name == "check"
-                           else "poll repeatedly in one process (for testing a background watcher)")
-        s.add_argument("--busy", help="JSON file of the student's busy blocks")
-        s.add_argument("--rows", help="JSON rows read from a school's class search page (rows source)")
-        if name == "check":
-            s.add_argument("--sample", action="store_true", help="replay the bundled snapshots; no saved state used")
-        else:
-            s.add_argument("--interval", type=int, default=45)
-            s.add_argument("--max-minutes", type=int, default=55)
-        s.set_defaults(fn=fn)
+    s = sub.add_parser("check", help="compare current seats with the last check")
+    s.add_argument("--busy", help="JSON file of the student's busy blocks")
+    s.add_argument("--rows", help="JSON rows read from a school's class search page (rows source)")
+    s.set_defaults(fn=cmd_check)
     return p
 
 
@@ -678,8 +637,6 @@ def main(argv=None):
     if a.cmd == "watch" and a.action == "add" and not a.source:
         print("ERROR: --source is required")
         return 2
-    if a.cmd == "loop":
-        a.sample = False
     try:
         return a.fn(a)
     except Fail as e:

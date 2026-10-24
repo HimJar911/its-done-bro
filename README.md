@@ -19,16 +19,12 @@ https://github.com/HimJar911/seat-sniper
 - Tells you about waitlist spots and waitlist movement, and labels them as not a seat.
 - Checks the opening against your calendar and says what it overlaps.
 - Offers a **swap**, never a drop, so you cannot end up with neither class.
-- Notes reserved seats and instructor-consent sections.
 - Sends nothing when nothing changed.
 - Never enrolls, drops, pays or signs in for you.
 
 ## Files
 
-- `SKILL.md`: the Skill Cubbie reads
-- `scripts/seat_sniper.py`: standard-library Python, no packages
-- `references/adapters.md`: data sources and how to add a school
-- `assets/`: real-shape class records used for a clearly labeled simulated replay (`check --sample`)
-- `tests/`: `python -m unittest discover -s tests`
+- `SKILL.md`: the instructions Cubbie follows
+- `scripts/seat_sniper.py`: the seat checker (Python standard library only, nothing to install)
 
 Seat counts come from each school's public class search. This project is not affiliated with any school or with Ellucian.
