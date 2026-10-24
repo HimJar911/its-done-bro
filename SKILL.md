@@ -75,14 +75,14 @@ Tell the student this school is read by hand, so a wrong alert is possible.
 2. List the sections. Keep it short; filter with `--status closed` and, if useful, `--comp`:
 
    ```bash
-   python3 scripts/seat_sniper.py lookup --source banner --host <host> --term <term> --subject <SUBJ> --number <NUM> --status closed
+   python3 seat_sniper.py lookup --source banner --host <host> --term <term> --subject <SUBJ> --number <NUM> --status closed
    ```
 
    Send at most five lines, plain text. Let the student pick.
 3. Save the watch (at most 5 at a time):
 
    ```bash
-   python3 scripts/seat_sniper.py watch add --source banner --host <host> --term <term> --subject <SUBJ> --number <NUM> --class <class number>
+   python3 seat_sniper.py watch add --source banner --host <host> --term <term> --subject <SUBJ> --number <NUM> --class <class number>
    ```
 
    The output says the section's current state. If it is already enrollable, tell the student right away and go to
@@ -106,7 +106,7 @@ recurring weekly blocks; days are `M T W Th F Sa Su`, times like `8:00 AM`:
 Then run:
 
 ```bash
-python3 scripts/seat_sniper.py check --busy busy.json
+python3 seat_sniper.py check --busy busy.json
 ```
 
 For a `rows` school, rebuild the rows file from the class search page first and add `--rows <file>`.
@@ -142,7 +142,7 @@ password and any two-factor prompt. Never ask for a password in the chat.
 Then ask whether they got in. When they say yes, stop that watch:
 
 ```bash
-python3 scripts/seat_sniper.py watch remove --class <class number>
+python3 seat_sniper.py watch remove --class <class number>
 ```
 
 ## Replies
