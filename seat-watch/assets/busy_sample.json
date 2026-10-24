@@ -1,0 +1,14 @@
+[
+ {
+  "title": "ENG 101 (example)",
+  "days": "M W F",
+  "start": "8:00 AM",
+  "end": "8:50 AM"
+ },
+ {
+  "title": "Part-time job (example)",
+  "days": "Th",
+  "start": "9:00 AM",
+  "end": "12:00 PM"
+ }
+]
