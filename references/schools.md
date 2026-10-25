@@ -1,6 +1,6 @@
 # Schools and data formats
 
-Seat Sniper reads each school's public class search, with no sign-in. Pick the source that matches the school.
+It's Done Bro reads each school's public class search, with no sign-in. Pick the source that matches the school.
 
 ## `--source asu`
 
@@ -13,8 +13,8 @@ For schools whose "Browse Classes" or "Class Search" page lives under `StudentRe
 page's address (for example `reg.example.edu`), then:
 
 ```bash
-python3 scripts/seat_sniper.py terms --source banner --host reg.example.edu
-python3 scripts/seat_sniper.py lookup --source banner --host reg.example.edu --term 202710 --subject BIO --number 101
+python3 scripts/its_done_bro.py terms --source banner --host reg.example.edu
+python3 scripts/its_done_bro.py lookup --source banner --host reg.example.edu --term 202710 --subject BIO --number 101
 ```
 
 `terms` lists the term codes; pick the one the student means. If `terms` or `lookup` exits 4, the school needs a sign-in

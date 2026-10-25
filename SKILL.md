@@ -1,9 +1,9 @@
 ---
-name: seat-sniper
+name: its-done-bro
 description: Watches a student's full classes and texts them the moment a seat they can actually take opens, with the registration link. Use when a student says a class or section is full or asks to be told when a seat opens. Not for general registration questions.
 ---
 
-# Seat Sniper
+# It's Done Bro
 
 A seat opening is only useful if the student can take it. This Skill watches the course in the background and, when
 something opens, checks that the required lab or recitation is also open, that it fits the student's schedule, and
@@ -26,7 +26,7 @@ Do not use it for how registration works, what to take or degree planning. Answe
 
 ## Setup
 
-None. The script uses only the Python standard library. Run it from this Skill's folder: `python3 scripts/seat_sniper.py`.
+None. The script uses only the Python standard library. Run it from this Skill's folder: `python3 scripts/its_done_bro.py`.
 
 ## Find the school and data source
 
@@ -51,7 +51,7 @@ If a school hides class search behind a sign-in, say so and stop. Never log in f
    `references/schools.md`) and run:
 
    ```bash
-   python3 scripts/seat_sniper.py watch add --source <asu|banner|rows> [--host <host>] --term <term> --subject CSE --number 340 \
+   python3 scripts/its_done_bro.py watch add --source <asu|banner|rows> [--host <host>] --term <term> --subject CSE --number 340 \
      --busy busy.json --now "<student's local date and time>"
    ```
 
@@ -63,12 +63,12 @@ If a school hides class search behind a sign-in, say so and stop. Never log in f
    - `NOTHING_USABLE_YET`: nothing to take yet; reassure them you are watching.
    - `ERROR` with exit 6: no such section; ask them to re-pick, offering the instructors listed.
 4. Calls. The first time only (check Cubbie's memory), ask one question: "Want me to call too if you don't respond to a
-   seat alert?" Save the answer in memory and run `python3 scripts/seat_sniper.py prefs --calls yes` (or `no`). Default
+   seat alert?" Save the answer in memory and run `python3 scripts/its_done_bro.py prefs --calls yes` (or `no`). Default
    is text only. Calls never happen between 22:00 and 07:30 unless the student changes it (`prefs --quiet 23:00-08:00`).
    Do not ask about anything else (components, quiet hours, frequency); infer or use defaults.
 5. Schedule the recurring check yourself (do not ask the student how often). Check about every 10 minutes, as often as
-   Cubbie allows, and create it once for all watches. Word it so it makes sense days later: "Seat Sniper check: from the
-   seat-sniper Skill folder run `python3 scripts/seat_sniper.py check --busy busy.json --now <student's local date and
+   Cubbie allows, and create it once for all watches. Word it so it makes sense days later: "It's Done Bro check: from the
+   its-done-bro Skill folder run `python3 scripts/its_done_bro.py check --busy busy.json --now <student's local date and
    time>`. Act on the output as the Skill says. If it prints NO CHANGE, send nothing."
 6. Confirm in one short line.
 
@@ -95,7 +95,7 @@ The `SUMMARY` line has the facts. One message, plain text, short lines, the clas
   - If the event says `call=yes`, create a one-time follow-up `follow_up_minutes` later: "if the student has not replied
     since the seat alert for <class>, call them and say: A seat just opened in <class>, check your texts and register
     now." Skip it if `call=no`.
-  - When the student replies in any way that shows they saw it, run `python3 scripts/seat_sniper.py ack <watch id>` and
+  - When the student replies in any way that shows they saw it, run `python3 scripts/its_done_bro.py ack <watch id>` and
     cancel the follow-up.
 - `BACKUP_AVAILABLE`: the section they watch opened but cannot be taken (see `reason`); another does work. Offer it.
 - `CLOSED_AGAIN`: one line, "It filled again. Still watching <class>." Nothing else.
@@ -105,7 +105,7 @@ The `SUMMARY` line has the facts. One message, plain text, short lines, the clas
 If there is a conflict, offer a **swap**, never a drop. If the school has a swap or replace-a-class feature, point the
 student to it. If it does not, tell them to add the new class first and drop the old one only after the add succeeds.
 
-Then ask whether they got in. When they say yes, stop the watch: `python3 scripts/seat_sniper.py watch remove --id <id>`
+Then ask whether they got in. When they say yes, stop the watch: `python3 scripts/its_done_bro.py watch remove --id <id>`
 (and remove the recurring check if no watches are left).
 
 ## Other requests

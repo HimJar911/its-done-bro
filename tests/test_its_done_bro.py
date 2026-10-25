@@ -1,7 +1,7 @@
 import contextlib, io, json, os, sys, tempfile, unittest
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "scripts"))
-import seat_sniper as ss
+import its_done_bro as ss
 
 def sec(n, comp="LEC", enrl=10, cap=10, link="L1", sec_no="01", days="M W", st="9:00 AM", en="9:50 AM", **kw):
     return ss.make_section(source="asu", term="2271", subject="CSE", number="340", class_nbr=n, section=sec_no, comp=comp,
@@ -17,7 +17,7 @@ def run(argv):
 class T(unittest.TestCase):
     def setUp(self):
         self.d = tempfile.mkdtemp()
-        os.environ["SEAT_SNIPER_STATE"] = os.path.join(self.d, "s.json")
+        os.environ["ITS_DONE_BRO_STATE"] = os.path.join(self.d, "s.json")
         self.cur = []
         ss.fetch_course = lambda source, term, subject, number, rows_file=None: self.cur
         self.add = ["watch", "add", "--source", "asu", "--term", "2271", "--subject", "CSE", "--number", "340", "--now", "2026-10-24T14:00"]
@@ -106,13 +106,13 @@ class T(unittest.TestCase):
         code, out = run(self.chk); self.assertIn("WATCH_BLIND", out)
         ss.fetch_course = lambda *a, **k: self.cur
         self.assertEqual(run(["check", "--now", "2027-01-01T10:00"])[0], 10)   # expired
-        open(os.environ["SEAT_SNIPER_STATE"], "w").write("{broken")
+        open(os.environ["ITS_DONE_BRO_STATE"], "w").write("{broken")
         code, out = run(["watch", "list"]); self.assertIn("set aside", out)
 
     def test_filters_and_missing(self):
         s = self.full(); s[0]["instructors"] = ["Ada Lee"]; s[2]["instructors"] = ["Bo Kim"]; self.cur = s
         run(self.add + ["--instructor", "lee"])
-        st = json.load(open(os.environ["SEAT_SNIPER_STATE"]))
+        st = json.load(open(os.environ["ITS_DONE_BRO_STATE"]))
         self.assertEqual(list(st["watches"][0]["ok"]), ["1"])
         self.assertEqual(run(self.add + ["--class", "999"])[0], 6)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""seat-sniper: watch class sections and report when a seat you can actually take opens.
+"""its-done-bro: watch class sections and report when a seat you can actually take opens.
 
 Standard library only. State lives under HOME so it survives restarts and Skill updates.
 A seat only counts if the section is open, every linked lab/recitation can also be taken,
@@ -29,7 +29,7 @@ import urllib.parse
 import urllib.request
 from datetime import date, datetime, timedelta
 
-UA = "seat-sniper/0.2 (student project; low-rate, read-only)"
+UA = "its-done-bro/0.2 (student project; low-rate, read-only)"
 ASU_API = "https://eadvs-cscc-catalog-api.apps.asu.edu/catalog-microservices/api/v1/search/classes"
 ASU_HEADERS = {"Authorization": "Bearer null",  # what ASU's public class-search page itself sends
                "User-Agent": UA}
@@ -392,8 +392,8 @@ def backups_for(w, secs, busy, exclude):
 # ---------- state ----------
 
 def state_path():
-    return os.environ.get("SEAT_SNIPER_STATE") or os.path.join(
-        os.path.expanduser("~"), ".config", "seat-sniper", "state.json")
+    return os.environ.get("ITS_DONE_BRO_STATE") or os.path.join(
+        os.path.expanduser("~"), ".config", "its-done-bro", "state.json")
 
 
 def load_state():
@@ -845,7 +845,7 @@ def add_source_args(s, required):
 
 
 def build_parser():
-    p = argparse.ArgumentParser(prog="seat_sniper.py", description="Watch classes and get alerted when a seat you can take opens.")
+    p = argparse.ArgumentParser(prog="its_done_bro.py", description="Watch classes and get alerted when a seat you can take opens.")
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("terms", help="list a school's term codes")
     add_source_args(s, True)
