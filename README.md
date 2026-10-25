@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/hero.svg" alt="Seat Sniper. Get the right seat before someone else does. A student texts Cubbie to watch CSE 340, then gets a text when a seat they can take opens: recitation open, fits their week, no restrictions." width="100%">
+<img src="assets/hero.webp" alt="Seat Sniper. Get the right seat before someone else does. A student texts Cubbie to watch CSE 340, then gets a text when a seat they can take opens, and a call if they miss it." width="100%">
 
 <img src="assets/steps.svg" alt="Text it. Forget it. Get the text." width="100%">
 
