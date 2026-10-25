@@ -1,170 +1,72 @@
-<div align="center">
+# Seat Sniper
 
-# Seat Sniper 🎯
+**Get the right seat before someone else does.**
 
-### Get the right seat before someone else does.
+Tell Cubbie which class is full, once. It watches in the background, and when a seat opens it works out whether *you* can take it: the lab, your schedule, any restrictions. Then it texts you with the registration link, and calls if you miss it. Works across multiple universities.
 
-**Seat Sniper watches your classes in the background, finds openings you can actually register for, and alerts you immediately with everything you need to grab the seat.**
-
-Labs. Recitations. Schedule conflicts. Restrictions. Backup sections. Checked before we bother you.
-
-<img src="https://img.shields.io/badge/SMART-knows%20if%20you%20can%20take%20it-2EE59D?style=for-the-badge&labelColor=0A0F1F" alt="SMART: knows if you can take it"/> <img src="https://img.shields.io/badge/FAST-text%20%E2%86%92%20link%20%E2%86%92%20optional%20call-5B9DFF?style=for-the-badge&labelColor=0A0F1F" alt="FAST: text, link, optional call"/> <img src="https://img.shields.io/badge/NEVER-drops%20your%20classes-FF6B7A?style=for-the-badge&labelColor=0A0F1F" alt="Never drops your classes"/>
-
-<br/>
-
-<img src="assets/demo.svg" alt="Animated example: Seat Sniper watches a course, a seat opens, it checks the recitation, your schedule and restrictions, then alerts you with an Add class link, a backup section and an optional call." width="100%"/>
+<img src="assets/demo.svg" alt="Example: you text Cubbie to watch a course. When a seat opens, Cubbie texts you that the seat, recitation and schedule all work, with a registration link, and calls if you miss it." width="100%"/>
 
 <sub>Example scenario.</sub>
 
-</div>
+## A seat opening isn't a seat you can take
 
-## Basic seat trackers vs Seat Sniper
+Most seat alerts stop at "something opened." Registration doesn't. The lecture has a seat, but the recitation is full. The section is open, but it lands on top of your job. The seat is reserved for a major you're not.
 
-**Basic tracker:** "A seat opened."  
-**Seat Sniper:** "A seat opened. You can actually take it. Your recitation works. It fits your schedule. Here's the registration link. Go."
+Seat Sniper checks all of that first, so the text you get is one you can act on.
 
-| Capability | A plain seat alert | Seat Sniper |
-| --- | :---: | :---: |
-| Detects an open seat | ✓ | ✓ |
-| Watches every matching section of a course | — | ✓ |
-| Checks the required lab or recitation | — | ✓ |
-| Checks your existing schedule | — | ✓ |
-| Catches registration conflicts before you do | — | ✓ |
-| Finds a backup section when the first one fails | — | ✓ |
-| Warns about reserved or instructor-consent seats | — | ✓ |
-| Texts you the moment it's usable | ✓ | ✓ |
-| Direct registration link in the alert | varies | ✓ |
-| Calls if you miss the text (opt-in) | — | ✓ |
-| Snooze and acknowledge | — | ✓ |
-| Never drops a class for you | — | ✓ |
-| Cross-school support | varies | ✓ |
+<img src="assets/compare.svg" alt="A plain seat alert only says a seat opened. Seat Sniper says the recitation is open, it fits your schedule, nothing restricts it, and a backup exists." width="100%"/>
 
-## Quick start
+## Say it once
 
-1. Text Cubbie this link and reply **yes**:
-
-   ```text
-   https://github.com/HimJar911/seat-sniper
-   ```
-
-2. Say: **"Watch CSE 340 for me."**
-
-That's it.
-
-## Seats don't stay open for long
-
-You shouldn't have to keep refreshing a registration page hoping to be there at exactly the right moment.
-
-Seat Sniper watches in the background. When an opening appears, it checks whether you can actually take it and puts the registration link in front of you immediately. The goal is to shrink one gap as far as possible:
-
-**seat opens → you know → you register**
-
-That's why the direct registration link is part of the alert, and why a missed text can turn into a phone call.
-
-## Smarter than a seat counter
-
-A seat becoming available doesn't mean you can register for the class. Seat Sniper checks the whole situation first:
-
-| Check | What Seat Sniper asks |
-| --- | --- |
-| **Linked components** | Is the required lab or recitation open too? |
-| **Your schedule** | Does the section fit around your existing classes? |
-| **Restrictions** | Is the seat reserved, or does it need instructor consent? |
-| **Alternatives** | If this section doesn't work, is another one open that does? |
-| **Speed** | If it works, the alert and the registration link reach you right away. |
-| **Escalation** | Miss the text? Cubbie can call, if you've said yes. |
-
-**Seat Sniper doesn't just watch seat counts. It watches for registration opportunities you can actually use.**
-
-And it never drops a class for you. If a section clashes with something you're already in, it names the conflict and offers the alternative:
-
-> *"Section 06 opened, but it overlaps MAT 343."*
-> *"Section 08 is open and fits your schedule instead."*
-
-## How it works
-
-```mermaid
-flowchart LR
-    A["School registration data"] --> B["Seat Sniper"]
-    B --> C["Seats + labs + schedule<br/>+ restrictions + backups"]
-    C --> D{"Can you actually<br/>register?"}
-    D -- no --> B
-    D -- yes --> E["Text you immediately<br/>with the registration link"]
-    E --> F{"No reply?"}
-    F -- "calls on" --> G["Cubbie calls"]
-    F -- replied --> H["You register"]
-    G --> H
-
-    style B fill:#2EE59D,color:#04241A,stroke:#2EE59D
-    style D fill:#FFB547,color:#2B1B00,stroke:#FFB547
-    style E fill:#5B9DFF,color:#fff,stroke:#5B9DFF
-    style H fill:#2EE59D,color:#04241A,stroke:#2EE59D
-```
-
-## Everything it does
-
-| Feature | What it does |
-| --- | --- |
-| **Whole-course watching** | "Watch CSE 340" covers every matching section. Add a professor, campus or online-only if you care. |
-| **Linked labs and recitations** | A lecture seat only counts if the lab or recitation you need is open too. |
-| **Schedule conflicts** | Checked against your calendar before you're alerted. |
-| **Backup sections** | If the one you wanted can't work, it finds one that does. |
-| **Restriction warnings** | Reserved seats and instructor-consent sections are flagged. |
-| **Text, then optional call** | Say yes once and it calls if you miss the text. Quiet hours keep it from ringing at 2 am. |
-| **Snooze and acknowledge** | Pause a watch, or tell it you've seen the alert. |
-| **Tells you what it skipped** | Ask "why didn't you tell me about section 3?" and it explains. |
-| **Stays honest** | It tells you if it can't see the school's class data, says when a seat fills again, and stops watching on its own when registration ends. |
-| **Cross-school support** | Works across multiple universities. |
-
-## Example conversation
-
-```text
-You:    Watch CSE 340 for me.
-Cubbie: Got it. I'm watching every CSE 340 section, and I'll only alert you when there's one you can actually take.
-        Want me to call too if you don't respond to a seat alert?
-You:    yes
-
-        ...you use Cubbie for everything else; the watch keeps running...
-
-Cubbie: Seat found: CSE 340 sec 04, M W 1:30-2:45 PM. 1 seat open.
-        Its recitation (04B, Fri 9:00) is open too, and it fits your schedule.
-        Section 06 opened too but overlaps MAT 343, so I skipped it.
-        Tap to register:
-        https://example.edu/register
-You:    got it
-Cubbie: Nice. Tell me when you're in and I'll stop watching.
-```
-
-## Cross-school support
-
-Seat Sniper works across multiple universities. Tell Cubbie your school and it finds the right class data on its own.
-
-## Under the hood
-
-```text
-SKILL.md                  what Cubbie reads: when to use it, what to ask, how to reply
-scripts/seat_sniper.py    fetches class data, evaluates every section, keeps state (standard library only)
-references/schools.md     school data sources and the schedule file format
-tests/                    checks for the seat, lab, schedule and call logic
-assets/demo.svg           the demo above
-```
-
-The script fetches, compares and remembers; Cubbie does the texting, calling, scheduling and browser handoff. Nothing about you leaves the school's public class search.
-
-## Install
-
-Text Cubbie this link, then reply **yes**:
+Text Cubbie this link and reply **yes**:
 
 ```text
 https://github.com/HimJar911/seat-sniper
 ```
 
-Then say: **"Watch CSE 340 for me."**
+Then talk to it like a person: **"Watch CSE 340 for me."**
+
+That's the whole setup. You don't pick a section, a check time, or a mode. It watches every matching section of the course and keeps going while you use Cubbie for everything else.
+
+## What it checks before it texts you
+
+1. **Is the seat real?** The section actually has room right now.
+2. **Is the rest of the package open?** If the course needs a lab or recitation, that has to be open too.
+3. **Does it fit your week?** It checks the meeting times against your calendar and the classes you've told Cubbie about.
+4. **Any strings attached?** Reserved seats and instructor-consent sections get flagged.
+5. **If not this one, which one?** When a section opens but can't work, it looks for another that can.
+
+Only then do you hear from it. Then it moves fast:
+
+- **A text** with the section, the lab, and the registration link on its own line.
+- **A tap-ready page.** Cubbie can open the registration page and hand it to you to sign in.
+- **A phone call** if you miss the text. You say yes to calls once, and quiet hours keep it from ringing overnight.
+- **A follow-up** if the seat fills again, so you're never left guessing.
+
+## Ask it like you'd ask a friend
+
+> **You:** Watch BIO 101, but only with Prof Lee.
+> **Cubbie:** On it. Watching only Prof Lee's sections.
+
+> **You:** Why didn't you tell me about section 3?
+> **Cubbie:** Section 3 had a seat, but its required lab was full.
+
+> **You:** Pause it for an hour.
+> **Cubbie:** Paused until 3:40.
+
+> **You:** I got in, thanks!
+> **Cubbie:** Nice. I've stopped watching it.
+
+## Hands off your registration
+
+Seat Sniper never enrolls, drops, swaps, pays or signs in for you, and it never asks for your password. When a class clashes with one you're already in, it names the conflict and offers an alternative instead of touching your schedule. You always make the final click.
+
+It also looks after itself: it tells you if it ever loses sight of a school's class data, stops watching on its own when registration ends, and only ever texts you.
+
+## Under the hood
+
+Seat Sniper is a Cubbie Skill: `SKILL.md` tells Cubbie when to use it and how to talk, and `scripts/seat_sniper.py` (standard library, nothing to install) reads the school's public class search, evaluates every section and remembers what changed. Cubbie handles the texting, calling and scheduling. School-specific notes are in `references/schools.md`, and `tests/` covers the seat, lab, schedule and call logic.
 
 ---
 
-<div align="center">
-
 **Like Seat Sniper? [Vote for it →](https://hackathon.cubbie.ai/#gallery)**
-
-</div>
