@@ -4,17 +4,7 @@
 
 <img src="assets/steps.svg" alt="Text it. Forget it. Get the text." width="100%">
 
-<br>
-
-**Text Cubbie this link, reply `yes`, then say what you want.**
-
-```
-https://github.com/HimJar911/its-done-bro
-```
-
-*"Watch CSE 340 for me."*
-
-<br>
+<img src="assets/install.svg" alt="Start with one text. Text Cubbie the link https://github.com/HimJar911/its-done-bro, reply yes, then say Watch CSE 340 for me." width="100%">
 
 <img src="assets/compare.svg" alt="A plain seat alert only says a seat opened. It's Done Bro says the lab is open, it fits your schedule, nothing restricts it, and a backup is ready." width="100%">
 
